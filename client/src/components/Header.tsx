@@ -10,7 +10,7 @@ export default function Header() {
       <nav className="nav-links">
         <Link to="/home" className="nav-btn">Home</Link>
         <Link to="/about" className="nav-btn">About</Link>
-        <Link to="/get-started" className="nav-btn">Get Started</Link>
+        <Link to="/get-started" className="nav-btn">Submit Lead</Link>
         <Link to="/login" className="nav-btn">Logout</Link>
       </nav>
     </header>
