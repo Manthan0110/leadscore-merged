@@ -1,0 +1,13 @@
+{
+  "name": "leadscore-merged",
+  "private": true,
+ "scripts": {
+  "dev:client": "cd client && npm run dev",
+  "dev:server": "cd server/leadscore-api-py && uvicorn main:app --reload --host 0.0.0.0 --port 8000",
+  "dev": "concurrently --names \"client,server\" -c \"cyan.bold,green.bold\" \"npm run dev:client\" \"npm run dev:server\""
+},
+
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

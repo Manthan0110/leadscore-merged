@@ -1,0 +1,70 @@
+name: Build and deploy (dev)
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  PROJECT_ID: leadscore-lite-dev
+  PROJECT_NUMBER: 737511327435
+  REGION: us-central1
+  REPO: leadscore-repo
+  IMAGE: leadscore-api-py
+  TAG: "latest"   # unique tag per commit
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to GCP using Workload Identity Federation
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: "projects/737511327435/locations/global/workloadIdentityPools/github/providers/my-repo"
+          service_account: "gha-deployer@${{ env.PROJECT_ID }}.iam.gserviceaccount.com"
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          install_components: "gke-gcloud-auth-plugin"
+        # Ensure gcloud prompts are disabled
+        env:
+          CLOUDSDK_CORE_DISABLE_PROMPTS: "1"
+
+      - name: Configure Docker auth for Artifact Registry
+        run: gcloud auth configure-docker "${{ env.REGION }}-docker.pkg.dev" --quiet
+
+      - name: Build & push container image
+        run: |
+          IMAGE_URI="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}"
+          echo "Building $IMAGE_URI"
+          docker build --no-cache -t "$IMAGE_URI" ./leadscore-api-py
+          docker push "$IMAGE_URI"
+        env:
+          CLOUDSDK_CORE_DISABLE_PROMPTS: "1"
+
+      - name: Deploy to Cloud Run (dev) using gcloud
+        env:
+          IMAGE_URI: "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}"
+          PROJECT_ID: ${{ env.PROJECT_ID }}
+          REGION: ${{ env.REGION }}
+          SA_EMAIL: "gha-deployer@${{ env.PROJECT_ID }}.iam.gserviceaccount.com"
+        run: |
+          gcloud run deploy leadscore-api-py \
+            --image="$IMAGE_URI" \
+            --region="$REGION" \
+            --platform=managed \
+            --service-account="$SA_EMAIL" \
+            --allow-unauthenticated \
+            --set-secrets="DB_PASS=leadscore-db-pass:latest" \
+            --set-env-vars="INSTANCE_CONNECTION_NAME=leadscore-lite-dev:us-central1:leadscore-db,DB_USER=leaduser,DB_NAME=leadscore_db,GOOGLE_GENAI_USE_VERTEXAI=true,GOOGLE_CLOUD_PROJECT=leadscore-lite-dev,GOOGLE_CLOUD_LOCATION=us-central1" \
+            --timeout=10m \
+            --project="$PROJECT_ID"
+        shell: bash

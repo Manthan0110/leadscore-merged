@@ -1,0 +1,1023 @@
+/* ---------- FIX: Prevent any input from overflowing cards ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Ensure images/inputs never exceed their containers */
+img, input, textarea, select { max-width: 100%; }
+
+/* Keep grid items from forcing the grid wider */
+.form-grid { align-items: start; }
+.form-grid > * { min-width: 0; }            /* crucial to stop overflow in two-col rows */
+textarea.input, .input { width: 100%; }     /* guarantee full width inside grid cells */
+
+/* Optional: keep the form card centered and contained */
+.form-card { max-width: 1100px; margin-left: auto; margin-right: auto; }
+
+/* ---------- NAVBAR & BRANDING ---------- */
+.site-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 18px;
+  background:transparent;
+  position:sticky;
+  top:0;
+  z-index:50;
+  backdrop-filter: blur(6px);
+}
+
+/* brand */
+.logo{display:flex;align-items:center;text-decoration:none;gap:12px}
+.logo-pill{
+  width:40px;height:40px;border-radius:10px;
+  background:linear-gradient(135deg,#ec4899,#8b5cf6);
+  color:white;font-weight:800;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 18px rgba(140,46,255,0.12);
+}
+.logo-text{font-weight:800;color:#0f172a;font-size:18px}
+.logo-lite{font-weight:600;color:#6b7280;margin-left:6px;font-size:14px}
+
+/* nav */
+.nav{display:flex;gap:18px;align-items:center}
+.nav-link{
+  font-weight:700; /* bold nav links */
+  color:var(--muted);
+  text-decoration:none;
+  padding:8px 6px;
+  border-radius:8px;
+}
+.nav-link:hover{color:#111}
+
+/* CTA gradient button in nav */
+.nav-cta{
+  font-weight:800;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:12px;
+  text-decoration:none;
+  background:linear-gradient(90deg,#ec4899 0%, #8b5cf6 100%);
+  box-shadow: 0 8px 24px rgba(139,92,246,0.16);
+  transform: translateY(0);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.nav-cta:hover{ transform: translateY(-2px); box-shadow: 0 18px 40px rgba(139,92,246,0.18) }
+
+/* ---------- Home heading under nav (LeadScore large heading) ---------- */
+.home-below-header {
+  max-width:1100px;
+  margin: 8px auto 0;
+  padding: 8px 16px;
+}
+
+.home-brand-heading {
+  font-size:42px;
+  font-weight:900;
+  line-height:1.02;
+  margin: 10px 0 6px;
+  background: linear-gradient(90deg,#ec4899,#8b5cf6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.5px;
+}
+
+/* stylized subtitle — "convert normal text something different" */
+.home-subtitle {
+  font-size:16px;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+/* fancy small accent under subtitle */
+.home-accent {
+  display:inline-block;
+  margin-top:6px;
+  padding:6px 12px;
+  border-radius:999px;
+  background: linear-gradient(90deg, rgba(236,72,153,0.08), rgba(139,92,246,0.08));
+  color:#6b7280;
+  font-weight:700;
+  font-size:13px;
+}
+
+/* ---------- Dashboard preview grid: 2 cards per row ---------- */
+.dashboard-preview {
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap:18px;
+  align-items:start;
+}
+
+/* ensure responsiveness */
+@media (max-width: 900px) {
+  .dashboard-preview {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* slightly increase card padding so graphs breathe */
+.dashboard-card{
+  padding:18px;
+  border-radius:12px;
+  background:var(--card);
+  box-shadow: 0 8px 28px rgba(2,6,23,0.04);
+  cursor: pointer;
+}
+.dashboard-card h3 { margin:0 0 8px 0 }
+
+/* mini-stat, donut legend tweaks (so contrast works with gradient nav) */
+.mini-stat-block .mini-value { font-weight:900; font-size:20px }
+.mini-stat-block .mini-label { color:var(--muted); font-size:13px }
+
+/* dot legend mapping to gradient colors */
+.dot.p1{ background:#10b981 }
+.dot.p2{ background:#8b5cf6 }
+.dot.p3{ background:#ec4899 }
+
+/* small utility: make Link button inside card slightly bolder */
+.small-muted a{ font-weight:700; color: #7c4dff; text-decoration:underline; }
+
+/* Navbar buttons all gradient style */
+.nav-btn {
+  font-weight: 700;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  background: linear-gradient(90deg, #ec4899, #8b5cf6);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.25);
+}
+
+/* Boxed graph card styles (box-line look) */
+.graph-box {
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(2,6,23,0.04);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* small header inside card */
+.card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px }
+.card-header h3 { margin:0; font-size:16px }
+.card-content { padding: 6px 4px; }
+
+/* dashboard grid (already present) */
+.dashboard-preview {
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap:18px;
+  align-items:start;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .dashboard-preview {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* hero title gradient (match your previous style) */
+.hero-title-gradient {
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 1.02;
+  margin: 6px 0;
+  background: linear-gradient(90deg,#2563eb,#0ea5a2,#b8862d);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* hero detail copy */
+.hero-detail {
+  color: #6b7280;
+  margin-top: 8px;
+  font-size: 16px;
+}
+
+/* small-muted */
+.small-muted { color: var(--muted); font-size: 13px }
+
+/* Hero section */
+.hero {
+  width: 100%;
+  padding: 60px 20px 40px;
+  background: linear-gradient(90deg, #f9fafb, #f3f4f6);
+  display: flex;
+  justify-content: center;
+}
+
+.hero-content {
+  max-width: 800px;
+  text-align: left;
+}
+
+.hero-title-gradient {
+  font-size: 42px;
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  background: linear-gradient(90deg, #3b82f6, #06b6d4, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  color: #374151;
+  line-height: 1.6;
+}
+
+/* HERO section wrapper */
+.hero {
+  width: 100%;
+  padding: 60px 20px 50px;
+  background: linear-gradient(90deg, #faf5ff, #fdf4ff);
+  display: flex;
+  justify-content: center;
+}
+
+.hero-content {
+  max-width: 820px;
+  text-align: left;
+  animation: fadeInUp 0.9s ease forwards;
+}
+
+/* Gradient pink-purple heading */
+.hero-title-pinkpurple {
+  font-size: 46px;
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #ec4899, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Subtitle with effects */
+.hero-subtitle-effect {
+  font-size: 18px;
+  color: #4b5563;
+  line-height: 1.6;
+  animation: fadeIn 1.2s ease;
+}
+
+/* Highlight pill for emphasis */
+.highlight-pill {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, rgba(236,72,153,0.1), rgba(139,92,246,0.1));
+  font-weight: 600;
+  color: #6b21a8;
+}
+
+/* Simple fade animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ABOUT PAGE STYLES */
+
+/* Main About Us heading */
+.about-headline {
+  font-size: 40px;
+  font-weight: 900;
+  color: #ec4899; /* pink */
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
+}
+
+.about-headline::after {
+  content: "";
+  display: block;
+  width: 60%;
+  height: 4px;
+  background: linear-gradient(90deg, #ec4899, #8b5cf6);
+  margin-top: 6px;
+  border-radius: 2px;
+}
+
+/* Subtitles (like 'What is LeadScore Lite?') */
+.about-subtitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #8b5cf6; /* purple */
+  margin-bottom: 16px;
+}
+
+/* Creative paragraphs */
+.creative-paragraph {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 18px;
+  color: #374151;
+  position: relative;
+  animation: fadeInUp 0.6s ease both;
+}
+
+/* Highlight and accent text */
+.highlight {
+  color: #ec4899;
+  font-weight: 700;
+  background: rgba(236, 72, 153, 0.1);
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.accent {
+  color: #8b5cf6;
+  font-weight: 700;
+}
+
+/* Features Grid */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 24px;
+}
+
+@media (max-width: 900px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Feature cards */
+.feature-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+.feature-title {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  background: linear-gradient(90deg, #ec4899, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Required field marker */
+.required {
+  color: #ec4899; /* pink */
+  font-weight: bold;
+}
+
+/* Form styling */
+.form-card {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.06);
+  margin-top: 20px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.form-full {
+  grid-column: span 2;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input:focus {
+  border-color: #ec4899;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.25);
+}
+
+/* Error message */
+.field-error {
+  margin-top: 12px;
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Submit button */
+.btn-submit {
+  margin-top: 18px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(90deg, #ec4899, #8b5cf6);
+  color: #fff;
+  font-size: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+}
+
+/* Toast notification */
+.toast-wrap {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+.toast {
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.toast-success {
+  background: rgba(16, 185, 129, 0.15);
+  color: #065f46;
+}
+
+/* SignUp / Form styles */
+
+/* form-card may exist; ensure these are present */
+.form-card {
+  background: #fff;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 10px 40px rgba(2,6,23,0.06);
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e6e9ee;
+  font-size: 15px;
+  margin-top: 6px;
+  transition: box-shadow .15s ease, border-color .15s ease;
+}
+.input:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 6px 20px rgba(139,92,246,0.12);
+}
+
+/* code input styling for verification */
+.code-input {
+  letter-spacing: 10px;
+  width: 100%;
+  padding: 12px 8px;
+  font-weight: 700;
+}
+
+/* submit button (gradient pink->purple) */
+.btn-submit {
+  display: inline-block;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(90deg, #ec4899, #8b5cf6);
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(139,92,246,0.18);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn-submit:hover { transform: translateY(-3px); }
+
+/* ghost button (secondary) */
+.btn-ghost {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid rgba(139,92,246,0.12);
+  color: #6b7280;
+  cursor: pointer;
+}
+
+/* error text */
+.field-error {
+  margin-top: 10px;
+  color: #dc2626;
+  font-weight: 700;
+}
+
+/* headline style (reuse about-headline) */
+.about-headline {
+  font-size: 28px;
+  font-weight: 900;
+  color: #ec4899;
+  margin-bottom: 12px;
+}
+
+/* small green message (success) */
+.form-message {
+  color: #16a34a;
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+/* Footer */
+.footer {
+  background: linear-gradient(90deg, #ec4899, #8b5cf6);
+  color: #fff;
+  padding: 40px 20px;
+  margin-top: 40px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+.footer-brand {
+  max-width: 300px;
+}
+
+.footer-title {
+  font-size: 22px;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+.footer-tagline {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.footer-heading {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  border-bottom: 2px solid rgba(255,255,255,0.2);
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+.footer-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-nav li {
+  margin: 6px 0;
+}
+
+.footer-link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+.footer-link:hover {
+  color: #f9fafb;
+  text-decoration: underline;
+}
+
+.footer-info p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+/* Navbar */
+.navbar {
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 14px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.navbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-logo {
+  font-size: 20px;
+  font-weight: 900;
+  background: linear-gradient(90deg, #ec4899, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-decoration: none;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 14px;
+}
+
+.nav-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(90deg, #ec4899, #8b5cf6);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+}
+
+/* Active link */
+.nav-btn.active {
+  box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* client/src/styles.css (append) */
+
+/* toast place inline next to button */
+.toast-inline {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid rgba(6, 95, 70, 0.08);
+  padding: 0.35rem 0.6rem;
+}
+
+/* gradient button fallback if your app doesn't already have it */
+.bg-gradient-to-r {
+  background-image: linear-gradient(90deg, #ec4899 0%, #6366f1 100%);
+}
+
+/* subtle blue input background */
+input[type="text"],
+input[type="email"],
+textarea {
+  background-color: #f0f7ff; /* same style used earlier */
+}
+
+/* keep existing form look — these are safe additions */
+button[disabled] {
+  opacity: 0.9;
+}
+
+/* Header styling */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 40px;
+  background: #fff;
+  box-shadow: 0px 2px 10px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800; /* bold */
+  color: #333;
+}
+
+.nav-links {
+  display: flex;
+  gap: 16px;
+}
+
+/* Pink+Purple Gradient Nav Buttons */
+.nav-btn {
+  padding: 8px 16px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6); /* pink → purple */
+  border-radius: 6px;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4); /* purple glow */
+}
+
+
+.dashboard-card {
+  position: relative;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+  transition: transform 220ms cubic-bezier(.22,.61,.36,1),
+              box-shadow 220ms cubic-bezier(.22,.61,.36,1),
+              filter 220ms ease;
+  transform-origin: center;
+  will-change: transform, box-shadow, filter;
+}
+
+.hover-pop:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 16px 40px rgba(16, 24, 40, 0.14);
+  filter: saturate(1.02);
+  z-index: 10;
+}
+
+.hover-pop:hover .card-header h3 {
+  filter: brightness(1.05);
+}
+
+.signup-page {
+  font-family: Calibri, sans-serif;
+}
+
+body {
+  font-family: Calibri, sans-serif;
+}
+
+/* Prevent blue text inside email input */
+input[type="email"] {
+  color: #111827; /* your desired text color (dark gray/black) */
+  -webkit-text-fill-color: #111827; /* needed for Chrome/Edge autofill */
+  caret-color: #111827; /* cursor color */
+}
+
+/* Override autofill background & text */
+input[type="email"]:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important; /* keep white background */
+  -webkit-text-fill-color: #111827 !important;             /* keep text dark */
+}
+
+input[type="password"] {
+  color: #111827; /* your desired text color (dark gray/black) */
+  -webkit-text-fill-color: #111827; /* needed for Chrome/Edge autofill */
+  caret-color: #111827; /* cursor color */
+}
+
+/* Override autofill background & text */
+input[type="password"]:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important; /* keep white background */
+  -webkit-text-fill-color: #111827 !important;             /* keep text dark */
+}
+
+input[type="name"] {
+  color: #111827; /* your desired text color (dark gray/black) */
+  -webkit-text-fill-color: #111827; /* needed for Chrome/Edge autofill */
+  caret-color: #111827; /* cursor color */
+}
+
+/* Override autofill background & text */
+input[type="name"]:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important; /* keep white background */
+  -webkit-text-fill-color: #111827 !important;             /* keep text dark */
+}
+
+
+/* ---------------------------------------------------
+   Get Started — Elegant Styling (drop-in)
+   Works with your existing class names
+--------------------------------------------------- */
+
+/* Page container */
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* Section */
+.about-section {
+  font-family: Calibri, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  color: #0f172a; /* slate-900 */
+}
+
+/* Headline with accent underline */
+.about-headline {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(26px, 3.2vw, 34px);
+  line-height: 1.15;
+  font-weight: 700;
+  margin: 8px 0 6px;
+  color: #ef2a8a; /* pink-600 vibe */
+  position: relative;
+}
+.about-headline::after {
+  content: "";
+  position: absolute;
+  left: 0.35rem;
+  bottom: -6px;
+  width: 120px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ef2a8a, #8b5cf6);
+  filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.25));
+}
+
+/* Sub copy */
+.about-text {
+  margin: 12px 0 18px;
+  color: #475569; /* slate-600 */
+  font-size: 14.5px;
+}
+
+/* Card */
+.form-card {
+  background: #fff;
+  border: 1px solid #eef2f7;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, 0.03),
+    0 10px 30px rgba(16, 24, 40, 0.08);
+  transition: box-shadow .2s ease, transform .08s ease;
+}
+.form-card:hover {
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, 0.04),
+    0 16px 40px rgba(16, 24, 40, 0.12);
+}
+
+/* Grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+.form-full { grid-column: 1 / -1; }
+@media (min-width: 860px) {
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 18px;
+  }
+}
+
+/* Labels / Required */
+label {
+  display: inline-block;
+  font-size: 13px;
+  color: #334155; /* slate-700 */
+  margin-bottom: 6px;
+}
+.required {
+  color: #ef4444; /* red-500 */
+}
+
+/* Inputs + Textarea */
+.input {
+  width: 100%;
+  border: 1px solid #e7ecf3;
+  background: #f5f8ff;                    /* soft blue fill */
+  color: #0f172a;
+  -webkit-text-fill-color: #0f172a;       /* keep autofill text dark */
+  caret-color: #0f172a;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14.5px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.input::placeholder { color: #9aa7b6; }
+
+.input:focus {
+  background: #ffffff;
+  border-color: #8b5cf6; /* violet */
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+}
+
+/* Keep email text from turning blue on autofill */
+input[type="email"]:-webkit-autofill,
+.input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #0f172a !important;
+}
+
+/* Textarea sizing */
+textarea.input {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Button */
+.btn-submit {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: fit-content;
+  min-width: 180px;
+  padding: 12px 18px;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: .2px;
+  color: #fff;
+  background: linear-gradient(135deg, #ef2a8a, #8b5cf6);
+  border: 0;
+  border-radius: 14px;
+  box-shadow: 0 12px 28px rgba(139, 92, 246, 0.35);
+  cursor: pointer;
+  transition: transform .06s ease, box-shadow .2s ease, filter .2s ease;
+}
+.btn-submit:hover {
+  filter: brightness(1.03);
+  box-shadow: 0 16px 36px rgba(139, 92, 246, 0.42);
+}
+.btn-submit:active {
+  transform: translateY(1px) scale(0.99);
+}
+.btn-submit[disabled] {
+  opacity: .6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Error */
+.field-error {
+  margin-top: 12px;
+  border-radius: 12px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+/* Toast */
+.toast-wrap {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all .25s ease;
+  z-index: 1000;
+}
+.toast-wrap.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+.toast {
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  box-shadow: 0 12px 30px rgba(16, 24, 40, .18);
+}
+.toast-success {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+/* Nice subtle page background for all content areas */
+.app-root {
+  background: linear-gradient(180deg, #f7f8fb 0%, #eef1f6 100%);
+  min-height: 100vh;
+}
+
+/* Optional: card container shadow edge for large screens */
+@media (min-width: 1100px) {
+  .container {
+    padding-top: 18px;
+  }
+}
+

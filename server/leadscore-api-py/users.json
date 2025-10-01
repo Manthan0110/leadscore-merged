@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1758714488590",
+    "name": "NEHA SURESH CHAVAN",
+    "phone": "7058167104",
+    "userType": "Internal",
+    "email": "neha.chavan2701@gmail.com",
+    "password": "$2b$12$bX/8jAmUw03TxszmOgpq4utG8Hvmza8qTmyUn11JJ0cQBwMIJdnCC",
+    "createdAt": "2025-09-24T17:18:09.594559Z"
+  },
+  {
+    "id": "1758739890415",
+    "name": "Neha Chavan",
+    "phone": "7499096350",
+    "userType": "External",
+    "email": "nehaproject2701@gmail.com",
+    "password": "$2b$12$Y6tP5w8vm8ducK0/lYh/1e5kShW5bDW2SpEy8txVx2GhrrrP8zdI2",
+    "createdAt": "2025-09-25T00:21:30.660471Z"
+  }
+]
