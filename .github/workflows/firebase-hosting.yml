@@ -3,7 +3,7 @@ name: Deploy to Firebase Hosting
 on:
   push:
     branches:
-      - main   # Change if your production branch is different
+      - main   # change if your production branch is different
 
 jobs:
   build_and_deploy:
@@ -19,15 +19,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"  # Vite requires Node 20+
 
-      # 3. Install dependencies
+      # 3. Install dependencies (in client folder)
       - name: Install dependencies
         run: npm ci
+        working-directory: client
 
-      # 4. Build project
+      # 4. Build project (in client folder)
       - name: Build project
         run: npm run build
+        working-directory: client
 
       # 5. Deploy to Firebase Hosting
       - name: Deploy to Firebase Hosting
@@ -36,4 +38,4 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
           projectId: "${{ secrets.FIREBASE_PROJECT_ID }}" # optional if in .firebaserc
-          channelId: "live"                               # "live" deploys to production
+          channelId: "live"
